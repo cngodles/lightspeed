@@ -36,12 +36,9 @@ div.planet[data-no="6"]:before { content:"Saturn"; }
 div.planet[data-no="7"]:before { content:"Uranus"; }
 div.planet[data-no="8"]:before { content:"Neptune"; }
 div.planet[data-no="9"]:before { content:"Pluto"; }
-
 </style>
 </head>
-
 <body>
-  
 <div id="solarsystem">
   <div data-no="1" id="mercury" class="planet open"><i> </i></div>
   <div data-no="2" id="venus" class="planet"><i></i></div>
@@ -54,10 +51,14 @@ div.planet[data-no="9"]:before { content:"Pluto"; }
   <div data-no="9" class="planet"><i></i></div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script type="text/babel">
+<script>
 var planets = {
-  'Mercury': { "au":0.39 },
+  'Mercury': { 
+    "au":0.39,
+    "facts":[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
   'Venus':	{ "au":0.72 },
   'Earth':	{ "au":1.00 },
   'Mars':	{ "au":1.52 },
@@ -68,11 +69,17 @@ var planets = {
   'Pluto':{ "au":39.48 }
 };
 
+function autokm(au){
+  //To 3 decimals by default.
+  var returnval = (au * 149597870.7).toFixed(3);
+  return returnval;
+}
+
 var au = 149597870.7; //KM
 var c = 299792.4; //KM/s
 
 $(document).ready(function(){
-  var mer = ((au*planets.Mercury.au)/c).toFixed(3);
+  var mer = (autokm(planets.Mercury.au)/c).toFixed(3);
   var merms = mer * 1000;
   console.log(merms);
   $(".planet.open i").animate({"width":"100%"}, merms, 'linear');
