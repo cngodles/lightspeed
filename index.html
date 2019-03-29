@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Speed of Light Simulation</title>
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+<style type="text/css">
+body { margin:0; font-family: 'Open Sans', sans-serif;}
+#solarsystem { position:fixed; width:100%; height:100%; background-color:#ddd; font-size:0; }
+
+.planet { width: 1%; height:100%; display:inline-block; border-right:1px solid #333; box-sizing:border-box; font-size:10px; position:relative; cursor: pointer; }
+.planet.open { width: 92%; cursor: default; }
+.planet.done i { position:absolute; display:block; height:4%; top:44%; width:100%; background-color:yellow; }
+.planet.open i { position:absolute; display:block; height:4%; top:44%; width:0; background-color:yellow; }
+
+div.planet:before { position:absolute; top:0; width: 100%; text-align:left; padding:0; font-size:14px; transform: rotate(90deg); transform-origin: bottom left; }  
+div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:18px; transform: rotate(0); }  
+  
+  
+div.planet[data-no="1"].open:before { content:"The closest planet to the sun, Mercury is 0.39 AU away from Sol"; }
+div.planet[data-no="2"].open:before { content:"Fact About Venus"; }
+div.planet[data-no="3"].open:before { content:"Earth"; }
+div.planet[data-no="4"].open:before { content:"Mars"; }
+div.planet[data-no="5"].open:before { content:"Jupiter"; }
+div.planet[data-no="6"].open:before { content:"Saturn"; }
+div.planet[data-no="7"].open:before { content:"Uranus"; }
+div.planet[data-no="8"].open:before { content:"Neptune"; }
+div.planet[data-no="9"].open:before { content:"Pluto"; }
+  
+div.planet[data-no="1"]:before { content:"Mercury"; }
+div.planet[data-no="2"]:before { content:"Venus"; }
+div.planet[data-no="3"]:before { content:"Earth"; }
+div.planet[data-no="4"]:before { content:"Mars"; }
+div.planet[data-no="5"]:before { content:"Jupiter"; }
+div.planet[data-no="6"]:before { content:"Saturn"; }
+div.planet[data-no="7"]:before { content:"Uranus"; }
+div.planet[data-no="8"]:before { content:"Neptune"; }
+div.planet[data-no="9"]:before { content:"Pluto"; }
+
+</style>
+</head>
+
+<body>
+  
+<div id="solarsystem">
+  <div data-no="1" id="mercury" class="planet open"><i> </i></div>
+  <div data-no="2" id="venus" class="planet"><i></i></div>
+  <div data-no="3" id="earth" class="planet"><i></i></div>
+  <div data-no="4" class="planet"><i></i></div>
+  <div data-no="5" class="planet"><i></i></div>
+  <div data-no="6" class="planet"><i></i></div>
+  <div data-no="7" class="planet"><i></i></div>
+  <div data-no="8" class="planet"><i></i></div>
+  <div data-no="9" class="planet"><i></i></div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+var planets = {
+  'Mercury': { "au":0.39 },
+  'Venus':	{ "au":0.72 },
+  'Earth':	{ "au":1.00 },
+  'Mars':	{ "au":1.52 },
+  'Jupiter':	{ "au":5.20 },
+  'Saturn':	{ "au":9.58 },
+  'Uranus	':	{ "au":19.20 },
+  'Neptune':	{ "au":30.05 },
+  'Pluto':{ "au":39.48 }
+};
+
+var au = 149597870.7; //KM
+var c = 299792.4; //KM/s
+
+$(document).ready(function(){
+  var mer = ((au*planets.Mercury.au)/c).toFixed(3);
+  var merms = mer * 1000;
+  console.log(merms);
+  $(".planet.open i").animate({"width":"100%"}, merms, 'linear');
+})
+.on("click", ".planet", function(){
+  $(".planet").removeClass("open");
+  $(this).addClass("open");
+})
+;  
+</script>
+</body>
+</html>
