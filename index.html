@@ -8,10 +8,14 @@
 body { margin:0; font-family: 'Open Sans', sans-serif;}
 #solarsystem { position:fixed; width:100%; height:100%; background-color:#ddd; font-size:0; }
 
-.planet { width: 1%; height:100%; display:inline-block; border-right:1px solid #333; box-sizing:border-box; font-size:10px; position:relative; cursor: pointer; }
+.planet { width: 1%; height:100%; display:inline-block; border-right:1px solid #333; box-sizing:border-box; font-size:10px; position:relative; cursor: pointer; transition: all 320ms ease-in-out; }
+.planet:not(.open):hover { background-color: blue; color:#fff; transition: none; }
 .planet.open { width: 92%; cursor: default; }
-.planet.done i { position:absolute; display:block; height:4%; top:44%; width:100%; background-color:yellow; }
+  
+  
 .planet.open i { position:absolute; display:block; height:4%; top:44%; width:0; background-color:yellow; }
+.planet.done i { position:absolute; display:block; height:4%; top:44%; width:100%; background-color:yellow; }
+
 
 div.planet:before { position:absolute; top:0; width: 100%; text-align:left; padding:0; font-size:14px; transform: rotate(90deg); transform-origin: bottom left; }  
 div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:18px; transform: rotate(0); }  
