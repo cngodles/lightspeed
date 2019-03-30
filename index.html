@@ -2,6 +2,8 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
 <title>Speed of Light Simulation</title>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <style type="text/css">
@@ -19,31 +21,21 @@ body { margin:0; font-family: 'Open Sans', sans-serif;}
 
 div.planet:before { position:absolute; top:0; width: 100%; text-align:left; padding:0; font-size:14px; transform: rotate(90deg); transform-origin: bottom left; }  
 div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:18px; transform: rotate(0); }  
+
   
-  
-div.planet[data-no="1"].open:before { content:"The closest planet to the sun, Mercury is 0.39 AU away from Sol"; }
-div.planet[data-no="2"].open:before { content:"Fact About Venus"; }
-div.planet[data-no="3"].open:before { content:"Earth"; }
-div.planet[data-no="4"].open:before { content:"Mars"; }
-div.planet[data-no="5"].open:before { content:"Jupiter"; }
-div.planet[data-no="6"].open:before { content:"Saturn"; }
-div.planet[data-no="7"].open:before { content:"Uranus"; }
-div.planet[data-no="8"].open:before { content:"Neptune"; }
-div.planet[data-no="9"].open:before { content:"Pluto"; }
-  
-div.planet[data-no="1"]:before { content:"Mercury"; }
-div.planet[data-no="2"]:before { content:"Venus"; }
-div.planet[data-no="3"]:before { content:"Earth"; }
-div.planet[data-no="4"]:before { content:"Mars"; }
-div.planet[data-no="5"]:before { content:"Jupiter"; }
-div.planet[data-no="6"]:before { content:"Saturn"; }
-div.planet[data-no="7"]:before { content:"Uranus"; }
-div.planet[data-no="8"]:before { content:"Neptune"; }
-div.planet[data-no="9"]:before { content:"Pluto"; }
+div.planet:before { content:attr(data-name); }
+div.planet.open:before { content:attr(data-name); }
+	
+@keyframes beam {
+  from {width:0;}
+  to {width: 100%;}
+}
+
 </style>
 </head>
 <body>
 <div id="solarsystem">
+	<!--
   <div data-no="1" id="mercury" class="planet open"><i> </i></div>
   <div data-no="2" id="venus" class="planet"><i></i></div>
   <div data-no="3" id="earth" class="planet"><i></i></div>
@@ -53,25 +45,109 @@ div.planet[data-no="9"]:before { content:"Pluto"; }
   <div data-no="7" class="planet"><i></i></div>
   <div data-no="8" class="planet"><i></i></div>
   <div data-no="9" class="planet"><i></i></div>
+	-->
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script>
-var planets = {
-  'Mercury': { 
-    "au":0.39,
-    "facts":[
+<script src="js/jquery.transit.min.js"></script>
+	<script>
+	
+var lightspeed = {
+	init:function(){
+		var returnhtml = [];
+		for(var i = 0; i < planets.length; i++){
+			var mer = (autokm(planets[i].span)/c).toFixed(3);
+  		var merms = mer * 1000;
+			returnhtml.push(''+
+			'<div class="planet" '+
+			'data-no="'+i+'" '+
+			'data-name="'+planets[i].name+'" '+
+			'data-au="'+planets[i].au+'" '+
+			'data-span="'+planets[i].span+'"'+
+			'data-await="'+merms+'"'+
+			'><i></i></div>');
+		}
+		$("#solarsystem").html(returnhtml.join("\n"));
+		$(".planet:first-child").addClass("open");
+		var timing = $(".planet.open").data("await");
+		//$(".planet.open").find("i").css({"animate":"beam "+timing+" linear 1"});
+		$(".planet.open").find("i").transition({"width":"100%"}, timing, "linear");
+	}
+};
+
+var planets = [
+  { 
+    name:"Mercury",
+		au:0.39,
+		span:0.39,
+    facts:[
       "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
     ]
   },
-  'Venus':	{ "au":0.72 },
-  'Earth':	{ "au":1.00 },
-  'Mars':	{ "au":1.52 },
-  'Jupiter':	{ "au":5.20 },
-  'Saturn':	{ "au":9.58 },
-  'Uranus	':	{ "au":19.20 },
-  'Neptune':	{ "au":30.05 },
-  'Pluto':{ "au":39.48 }
-};
+	{ 
+    name:"Venus",
+		au:0.72,
+		span:0.33,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Earth",
+		au:1,
+		span:0.28,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Mars",
+		au:1.52,
+		span:0.52,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Jupiter",
+		au:5.20,
+		span:3.68,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Saturn",
+		au:9.58,
+		span:4.38,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Uranus",
+		au:19.20,
+		span:9.62,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Neptune",
+		au:30.05,
+		span:10.85,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  },
+	{ 
+    name:"Pluto",
+		au:39.48,
+		span:9.43,
+    facts:[
+      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+    ]
+  }
+];
 
 function autokm(au){
   //To 3 decimals by default.
@@ -83,14 +159,23 @@ var au = 149597870.7; //KM
 var c = 299792.4; //KM/s
 
 $(document).ready(function(){
-  var mer = (autokm(planets.Mercury.au)/c).toFixed(3);
+  lightspeed.init();
+	/*
+	var mer = (autokm(planets.Mercury.au)/c).toFixed(3);
   var merms = mer * 1000;
   console.log(merms);
   $(".planet.open i").animate({"width":"100%"}, merms, 'linear');
+	*/
 })
 .on("click", ".planet", function(){
   $(".planet").removeClass("open");
-  $(this).addClass("open");
+	$(".planet").find("i").remove();
+  $(this).addClass("open").html("<i></i>");
+	var timing = $(this).data("await");
+	$(this).find("i").transition({"width":"100%"}, timing, "linear");
+})
+.on("transitionend", ".planet.open i", function(){
+	console.log("We made it!");
 })
 ;  
 </script>
