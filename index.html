@@ -176,6 +176,7 @@ $(document).ready(function(){
 })
 .on("transitionend", ".planet.open i", function(){
 	console.log("We made it!");
+	$(this).parents(".planet").next().trigger("click");
 })
 ;  
 </script>
