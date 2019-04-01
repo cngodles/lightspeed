@@ -8,14 +8,16 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <style type="text/css">
 body { margin:0; font-family: 'Open Sans', sans-serif;}
-	div  { box-sizing:border-box; }
-#solarsystem { position:fixed; width:100%; height:100%; background-color:#333; font-size:0; color:#fff; }
+div  { box-sizing:border-box; }
+header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align: center; line-height: 30px; }
+#solarsystem { position:fixed; width:100%; height:100%; top:30px; left:0; right:0; bottom:0; background-color:#333; font-size:0; color:#fff; }
 
 #intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; }
-	
-.planet { width: 1%; height:100%; display:inline-block; border-right:1px solid #333; box-sizing:border-box; font-size:10px; position:relative; cursor: pointer; transition: all 320ms ease-in-out; }
-.planet:not(.open):hover { background-color: blue; color:#fff; transition: none; }
-.planet.open { width: 92%; cursor: default; }
+.planet     { width:0; height:100%; display:none; box-sizing:border-box; }
+.planet.edge { width: 2%; height:100%; position: fixed; left:0; display:block;  border-right:1px solid #333; font-size:10px; cursor: pointer; transition: all 320ms ease-in-out; }
+.planet.edge.next { left:auto; right:0; border-left:1px solid #333; }
+
+.planet.open { width: 96%; position: fixed; left:2%; right:2%; display:inline-block; cursor: default; background-color: #555; }
   
   
 .planet.open i { position:absolute; display:block; height:4%; top:44%; width:0; background-color:yellow; }
@@ -30,6 +32,9 @@ div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:36
 div.planet:before { content:attr(data-name); }
 div.planet.open:before { content:attr(data-name); }
 
+.planetbody { display:block; border-radius:50%; background-color: #fff; top: 50%; left:50%; position: absolute; z-index: 99; overflow: hidden; }
+.planetbody img { width: 100%; height:auto; display: block; margin: 0; padding: 0; outline: 0; }
+  
 .timer { position: absolute; width:50%; height:20%; top:60%; left:25%; right:25%; bottom:20%; color:#fff; text-align: center; z-index: 99; }
 .facts { font-size:18px; line-height:24px; position: absolute; width:50%; height:20%; top:20%; left:25%; right:25%; bottom:60%; color:#fff; text-align: center; z-index: 99; }
 
@@ -42,6 +47,7 @@ div.planet.open:before { content:attr(data-name); }
 </style>
 </head>
 <body>
+<header>Lightspeed</header>
 <div id="solarsystem">
 	---
 </div>
@@ -67,6 +73,8 @@ var lightspeed = {
 			returnhtml.push(''+
 			'<div class="planet" '+
 			'data-no="'+i+'" '+
+      'data-t="'+planets[i].t+'" '+
+      'data-d="'+planets[i].d+'" '+
 			'data-name="'+planets[i].name+'" '+
 			'data-au="'+planets[i].au+'" '+
 			'data-span="'+planets[i].span+'"'+
@@ -87,12 +95,38 @@ var lightspeed = {
 		var thisobj = this;
 		clearInterval(thisobj.factInternal);
 		clearTimeout(thisobj.factTimeout);
-		$(".planet").removeClass("open");
+		$(".planet").removeClass("open").removeClass("edge").removeClass("next");
 		$(".planet").find("i").remove();
 		$(".planet").find(".timer").remove();
-		
-		target.addClass("open").html('<i></i><div class="timer"></div><div class="facts"></div>');
+		$(".planet").find(".facts").remove();
+    target.next().addClass("edge").addClass("next");
+    target.prev().addClass("edge");
+    var t = target.data("t");
+    var fillhtml;
+    switch(t){ 
+      case 'flyby':
+        
+        var spanwidthkm = parseFloat(autokm(parseFloat(target.data("span"))));
+        //console.log(spanwidthkm);
+        var spanwidth = spanwidthkm.toFixed(1);
+        var planetpercent = ((target.data("d")/spanwidth)*100).toFixed(1);
+        console.log(spanwidthkm, spanwidth, planetpercent);
+        
+        fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>'+
+          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="/t.png"></div>';
+        break;
+      case 'cruise':
+        fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>';
+        break;
+    }
+  
+    
+		target.addClass("open").html(fillhtml);
+    
+    
+    
 		var timing = target.data("await");
+
 		var planetid = target.data("no");
 		var factwindow = parseInt(target.data("await"))-10000;
 		var factcount = planets[planetid].facts.length;
@@ -109,11 +143,11 @@ var lightspeed = {
 		var facttime = 5000;
 		
 		thisobj.factTimeout = setTimeout(function(){
-			console.log("1st timeout called!");
+			//console.log("1st timeout called!");
 			var nextinternal = $(this).parents(".planet").data("factint");
 			$(".planet.open .fact:eq(0)").addClass("on").fadeIn(400, function(){
 				thisobj.factInternal = setInterval(function(){
-					console.log("setInterval called!");
+					//console.log("setInterval called!");
 					var nextfact = $(".planet.open .fact.on").next();
 					if(nextfact.length < 1){
 						clearInterval(thisobj.factInternal);
@@ -125,22 +159,6 @@ var lightspeed = {
 				}, factintervals);
 			})
 		}, 5000);
-		
-		/*
-		var factno = [];
-		for(var j = 0; j < factcount; j++){
-			factno[j] = j;
-			facttime = facttime + parseInt(factintervals);
-			console.log(j, facttime, "setting timeout");
-			setInterval(function(){
-				console.log("timeout called!", thisj);
-				$(".planet.open .fact.on").removeClass("on").fadeOut(400, function(){
-					$(".planet.open .fact:eq("+thisj+")").addClass("on").fadeIn(400);
-				});
-				
-			}, facttime);
-		}
-		*/
 		
 		this.goNext = true;
 		target.find("i").stop(true, true)
@@ -158,10 +176,12 @@ var lightspeed = {
 var planets = [
   { 
     name:"Mercury",
+    t:'cruise',
 		au:0.39,
-		span:0.25, //39
+		span:0.06, //39
     facts:[
       "Mercury is the smallest planet in our solar system. It’s just a little bigger than Earth’s moon.", 
+      "Your weight on Mercury would more than twice as much as your weight on Earth's moon, however.", 
 			"It is the closest planet to the sun, but not the hottest. Venus is hotter.", 
 			"Mercury has no moons.", 
 			"Mercury is much closer to the Sun than Earth. Because of this, you can never see it far from the "+
@@ -169,24 +189,62 @@ var planets = [
 			"The Sun rises once every 180 Earth days on Mercury"
     ]
   },
+  { 
+    name:"Mercury Flyby",
+		t:'flyby',
+    au:0.39,
+		span:0.01, //2
+    d:4849,
+    facts:[
+      "You've made it!", 
+    ]
+  },
 	{ 
     name:"Venus",
+    t:'cruise',
 		au:0.72,
 		span:0.33, //33
     facts:[
-      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+      "The surface of Venus is hot enough to melt Lead.", 
+      "Venus rotates backwards compared to Earth. The sun rises in the West and sets in the East.", 
+      "Venus is only slightly smaller than Earth with a comparable interior. You would weigh only 1/10th less on Venus", 
+      "The last transit of Venus across the Sun as seen from Earth occured June 5-6, 2012. The next one won't happen until December 2117.", 
+      "Venus can be bright enough in the night sky to cast visible shadows.",
+      "The first successful flyby of Venus was by the Mariner 2 spacecraft, coming within 35,000 km."
+    ]
+  },
+  { 
+    name:"Venus Flyby",
+		t:'flyby',
+    au:0.39,
+		span:0.01, //2
+    d:12104,
+    facts:[
+      "You've made it!", 
     ]
   },
 	{ 
     name:"Earth",
+    t:'cruise',
 		au:1,
 		span:0.28,
     facts:[
       "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
     ]
   },
+  { 
+    name:"Earth Flyby",
+		t:'flyby',
+    au:0.39,
+		span:0.01, //2
+    d:12756,
+    facts:[
+      "You've made it!", 
+    ]
+  },
 	{ 
     name:"Mars",
+    t:'cruise',
 		au:1.52,
 		span:0.52,
     facts:[
@@ -195,14 +253,26 @@ var planets = [
   },
 	{ 
     name:"Jupiter",
+    t:'cruise',
 		au:5.20,
 		span:3.68,
     facts:[
       "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
     ]
   },
+  { 
+    name:"Jupiter Flyby",
+		t:'flyby',
+    au:0.39,
+		span:0.01, //2
+    d:142984,
+    facts:[
+      "You've made it!", 
+    ]
+  },
 	{ 
     name:"Saturn",
+    t:'cruise',
 		au:9.58,
 		span:4.38,
     facts:[
@@ -211,6 +281,7 @@ var planets = [
   },
 	{ 
     name:"Uranus",
+    t:'cruise',
 		au:19.20,
 		span:9.62,
     facts:[
@@ -219,6 +290,7 @@ var planets = [
   },
 	{ 
     name:"Neptune",
+    t:'cruise',
 		au:30.05,
 		span:10.85,
     facts:[
@@ -227,6 +299,7 @@ var planets = [
   },
 	{ 
     name:"Pluto",
+    t:'cruise',
 		au:39.48,
 		span:9.43,
     facts:[
