@@ -12,7 +12,9 @@ div  { box-sizing:border-box; }
 header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align: center; line-height: 30px; }
 #solarsystem { position:fixed; width:100%; height:100%; top:30px; left:0; right:0; bottom:0; background-color:#333; font-size:0; color:#fff; }
 
-#intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; }
+#intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; padding: 30px; }
+#intro h1 { font-size: 36px; }
+  #intro a  { display: inline-block; padding: 10px 20px; text-align: center; background-color: rgba(255,150,0,1.00); color:#fff; text-decoration: none; border:double 3px #333; }
 .planet     { width:0; height:100%; display:none; box-sizing:border-box; }
 .planet.edge { width: 2%; height:100%; position: fixed; left:0; display:block;  border-right:1px solid #333; font-size:10px; cursor: pointer; transition: all 320ms ease-in-out; }
 .planet.edge.next { left:auto; right:0; border-left:1px solid #333; }
@@ -38,10 +40,18 @@ div.planet.open:before { content:attr(data-name); }
 .timer { position: absolute; width:50%; height:20%; top:60%; left:25%; right:25%; bottom:20%; color:#fff; text-align: center; z-index: 99; }
 .facts { font-size:18px; line-height:24px; position: absolute; width:50%; height:20%; top:20%; left:25%; right:25%; bottom:60%; color:#fff; text-align: center; z-index: 99; }
 
-
-@keyframes beam {
-  from {width:0;}
-  to {width: 100%;}
+@media only screen and (max-width: 767px) {
+  #intro { position: fixed; width:70%; height:70%; top:15%; left:15%; right:15%; bottom:15%; padding: 10px; }
+  #intro h1 { font-size: 24px; }
+  #intro p  { font-size: 14px; }
+  
+  .facts { font-size:18px; line-height:24px; position: absolute; width:80%; left:10%; right:10%; }
+}
+@media only screen and (max-width: 320px) {
+  #intro h1 { font-size: 21px; }
+  #intro p  { font-size: 12px; }
+  
+  .facts { font-size:18px; line-height:24px; position: absolute; width:80%; left:10%; right:10%; }
 }
 
 </style>
@@ -54,6 +64,9 @@ div.planet.open:before { content:attr(data-name); }
 <div id="intro">
 	<h1>The Speed of Light</h1>
 	<p><i>In Real Time.</i></p>
+  <p>Light is fast. It travels 300km every second, or 186,000 miles per second. But space is also large. 
+    Our own galaxy would take 200,000 years to cross at the speed of light. Once a photon leaves the Sun, on average it will take more than 4 hours
+  to cross the orbit of Nepture.Click the button below to run a simulated journey of a beam of light as it leaves the Sun and crosses the Solar System.</p>
 	<p><a href="#" class="action_startdemo">Lets go!</a></p>
 </div>
 <!--
