@@ -113,7 +113,7 @@ var lightspeed = {
         console.log(spanwidthkm, spanwidth, planetpercent);
         
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>'+
-          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="/t.png"></div>';
+          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="t.png"></div>';
         break;
       case 'cruise':
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>';
@@ -168,7 +168,13 @@ var lightspeed = {
 			}
 		});
 	},
+  startTheClock(timeleft){
+    this.clockInterval = setInterval(function(){
+      
+    }, 1000);
+  },
 	goNext:false,
+  clockInterval:null,
 	factInternal:null,
 	factTimeout:null
 };
@@ -178,7 +184,7 @@ var planets = [
     name:"Mercury",
     t:'cruise',
 		au:0.39,
-		span:0.06, //39
+		span:0.385, //39
     facts:[
       "Mercury is the smallest planet in our solar system. It’s just a little bigger than Earth’s moon.", 
       "Your weight on Mercury would more than twice as much as your weight on Earth's moon, however.", 
@@ -193,7 +199,7 @@ var planets = [
     name:"Mercury Flyby",
 		t:'flyby',
     au:0.39,
-		span:0.01, //2
+		span:0.01, //1
     d:4849,
     facts:[
       "You've made it!", 
@@ -203,7 +209,7 @@ var planets = [
     name:"Venus",
     t:'cruise',
 		au:0.72,
-		span:0.33, //33
+		span:0.32, //33
     facts:[
       "The surface of Venus is hot enough to melt Lead.", 
       "Venus rotates backwards compared to Earth. The sun rises in the West and sets in the East.", 
@@ -217,7 +223,7 @@ var planets = [
     name:"Venus Flyby",
 		t:'flyby',
     au:0.39,
-		span:0.01, //2
+		span:0.01, //1
     d:12104,
     facts:[
       "You've made it!", 
@@ -227,9 +233,13 @@ var planets = [
     name:"Earth",
     t:'cruise',
 		au:1,
-		span:0.28,
+		span:0.27, //28
     facts:[
-      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+      "A belt on Earth at the Equator would be 40,075KM long. If in a vacuum, light can travel that distance 7 1/2 times in a single second.", 
+      "It is believed that the Earth formed 4.6 billion years ago. The First 600 million years of Earth's history is known as the Hadean Eon.", 
+      "70.8% of the Earth's surface is covered by water.", 
+      "The average amount of Oxygen in the Earth's atmosphere is 21%. It has been as high as 35% around 300 million years ago.", 
+      "The Moon is the largest compared to a parent planet (Not including Pluto). The Moon is tidally locked and always shows the same face towards Earth."
     ]
   },
   { 
@@ -246,16 +256,31 @@ var planets = [
     name:"Mars",
     t:'cruise',
 		au:1.52,
-		span:0.52,
+		span:0.51, //52
     facts:[
-      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+      "Mars has two small moons, Phobos & Deimos. It's beleived that in 30-50 million years, Phobos will break up and perhaps create a ring.", 
+      "Mars and our own Moon are two objects that have been visited by rovers and studied. Landers have reached the surfaces of both Venus and Titan.", 
+      "It can reach a high temperature of 35C (95F) on Mars. The air pressure is only 0.6% of Earths at the surface. 96% of the atmosphere is carbon dioxide.", 
+      "Global dust storms can cover the entire planet in clouds with wind speeds over 160 km/h (100mph).", 
+      "A day on Mars is similar to a day on Earth, lasting 24 hours and 39 minutes.",
+      "Mars can be seen unaided from Earth and even shows up as a redish looking point of light. It is the 5th brightest object in the sky when at its brightest."
+    ]
+  },
+  { 
+    name:"Mars Flyby",
+		t:'flyby',
+    au:0.39,
+		span:0.01, //2
+    d:6792,
+    facts:[
+      "You've made it!", 
     ]
   },
 	{ 
     name:"Jupiter",
     t:'cruise',
 		au:5.20,
-		span:3.68,
+		span:3.67, //3.68
     facts:[
       "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
     ]
