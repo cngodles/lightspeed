@@ -8,8 +8,11 @@
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <style type="text/css">
 body { margin:0; font-family: 'Open Sans', sans-serif;}
-#solarsystem { position:fixed; width:100%; height:100%; background-color:#ddd; font-size:0; }
+	div  { box-sizing:border-box; }
+#solarsystem { position:fixed; width:100%; height:100%; background-color:#333; font-size:0; color:#fff; }
 
+#intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; }
+	
 .planet { width: 1%; height:100%; display:inline-block; border-right:1px solid #333; box-sizing:border-box; font-size:10px; position:relative; cursor: pointer; transition: all 320ms ease-in-out; }
 .planet:not(.open):hover { background-color: blue; color:#fff; transition: none; }
 .planet.open { width: 92%; cursor: default; }
@@ -19,13 +22,18 @@ body { margin:0; font-family: 'Open Sans', sans-serif;}
 .planet.done i { position:absolute; display:block; height:4%; top:44%; width:100%; background-color:yellow; }
 
 
-div.planet:before { position:absolute; top:0; width: 100%; text-align:left; padding:0; font-size:14px; transform: rotate(90deg); transform-origin: bottom left; }  
-div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:18px; transform: rotate(0); }  
+
+div.planet:before { position:absolute; top:0; width: 100%; text-align:left; padding:0; font-size:14px; transform: rotate(90deg); transform-origin: bottom left; box-sizing:border-box; }  
+div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:36px; letter-spacing: -0.04; transform: rotate(0); }  
 
   
 div.planet:before { content:attr(data-name); }
 div.planet.open:before { content:attr(data-name); }
-	
+
+.timer { position: absolute; width:50%; height:20%; top:60%; left:25%; right:25%; bottom:20%; color:#fff; text-align: center; z-index: 99; }
+.facts { font-size:18px; line-height:24px; position: absolute; width:50%; height:20%; top:20%; left:25%; right:25%; bottom:60%; color:#fff; text-align: center; z-index: 99; }
+
+
 @keyframes beam {
   from {width:0;}
   to {width: 100%;}
@@ -35,22 +43,21 @@ div.planet.open:before { content:attr(data-name); }
 </head>
 <body>
 <div id="solarsystem">
-	<!--
-  <div data-no="1" id="mercury" class="planet open"><i> </i></div>
-  <div data-no="2" id="venus" class="planet"><i></i></div>
-  <div data-no="3" id="earth" class="planet"><i></i></div>
-  <div data-no="4" class="planet"><i></i></div>
-  <div data-no="5" class="planet"><i></i></div>
-  <div data-no="6" class="planet"><i></i></div>
-  <div data-no="7" class="planet"><i></i></div>
-  <div data-no="8" class="planet"><i></i></div>
-  <div data-no="9" class="planet"><i></i></div>
-	-->
+	---
 </div>
+<div id="intro">
+	<h1>The Speed of Light</h1>
+	<p><i>In Real Time.</i></p>
+	<p><a href="#" class="action_startdemo">Lets go!</a></p>
+</div>
+<!--
+<div id="timer">90 seconds...</div>
+-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<!--
 <script src="js/jquery.transit.min.js"></script>
-	<script>
-	
+-->
+<script>	
 var lightspeed = {
 	init:function(){
 		var returnhtml = [];
@@ -64,29 +71,108 @@ var lightspeed = {
 			'data-au="'+planets[i].au+'" '+
 			'data-span="'+planets[i].span+'"'+
 			'data-await="'+merms+'"'+
-			'><i></i></div>');
+			'></div>');
 		}
 		$("#solarsystem").html(returnhtml.join("\n"));
+		this.startLight($(".planet:first-child"));
+		/*
 		$(".planet:first-child").addClass("open");
+		$(".planet:first-child").html('<i></i><div class="timer"></div>');
 		var timing = $(".planet.open").data("await");
 		//$(".planet.open").find("i").css({"animate":"beam "+timing+" linear 1"});
 		$(".planet.open").find("i").transition({"width":"100%"}, timing, "linear");
-	}
+		*/
+	},
+	startLight:function(target){
+		var thisobj = this;
+		clearInterval(thisobj.factInternal);
+		clearTimeout(thisobj.factTimeout);
+		$(".planet").removeClass("open");
+		$(".planet").find("i").remove();
+		$(".planet").find(".timer").remove();
+		
+		target.addClass("open").html('<i></i><div class="timer"></div><div class="facts"></div>');
+		var timing = target.data("await");
+		var planetid = target.data("no");
+		var factwindow = parseInt(target.data("await"))-10000;
+		var factcount = planets[planetid].facts.length;
+		var factintervals = (factwindow/factcount).toFixed(0);
+		target.data("factint", factintervals);
+		
+		var facthtml = [];
+		
+		for(var j = 0; j < factcount; j++){
+			facthtml.push('<p class="fact" data-fno="'+j+'" style="display:none;">'+planets[planetid].facts[j]+'</p>');
+		}
+		target.find(".facts").html(facthtml.join("\n"));
+		
+		var facttime = 5000;
+		
+		thisobj.factTimeout = setTimeout(function(){
+			console.log("1st timeout called!");
+			var nextinternal = $(this).parents(".planet").data("factint");
+			$(".planet.open .fact:eq(0)").addClass("on").fadeIn(400, function(){
+				thisobj.factInternal = setInterval(function(){
+					console.log("setInterval called!");
+					var nextfact = $(".planet.open .fact.on").next();
+					if(nextfact.length < 1){
+						clearInterval(thisobj.factInternal);
+					} else {
+						$(".planet.open .fact.on").removeClass("on").fadeOut(400, function(){
+							nextfact.addClass("on").fadeIn(400);
+						});
+					}
+				}, factintervals);
+			})
+		}, 5000);
+		
+		/*
+		var factno = [];
+		for(var j = 0; j < factcount; j++){
+			factno[j] = j;
+			facttime = facttime + parseInt(factintervals);
+			console.log(j, facttime, "setting timeout");
+			setInterval(function(){
+				console.log("timeout called!", thisj);
+				$(".planet.open .fact.on").removeClass("on").fadeOut(400, function(){
+					$(".planet.open .fact:eq("+thisj+")").addClass("on").fadeIn(400);
+				});
+				
+			}, facttime);
+		}
+		*/
+		
+		this.goNext = true;
+		target.find("i").stop(true, true)
+		.animate({"width":"100%"}, timing, "linear", function(){
+			if(thisobj.goNext == true){
+				target.next().trigger("click");
+			}
+		});
+	},
+	goNext:false,
+	factInternal:null,
+	factTimeout:null
 };
 
 var planets = [
   { 
     name:"Mercury",
 		au:0.39,
-		span:0.39,
+		span:0.25, //39
     facts:[
-      "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
+      "Mercury is the smallest planet in our solar system. It’s just a little bigger than Earth’s moon.", 
+			"It is the closest planet to the sun, but not the hottest. Venus is hotter.", 
+			"Mercury has no moons.", 
+			"Mercury is much closer to the Sun than Earth. Because of this, you can never see it far from the "+
+			"Sun in the sky, usually at Sunrise or Sunset.", 
+			"The Sun rises once every 180 Earth days on Mercury"
     ]
   },
 	{ 
     name:"Venus",
 		au:0.72,
-		span:0.33,
+		span:0.33, //33
     facts:[
       "Fact 1", "Fact 2", "Fact 3", "Fact 4", "Fact 5"
     ]
@@ -159,7 +245,7 @@ var au = 149597870.7; //KM
 var c = 299792.4; //KM/s
 
 $(document).ready(function(){
-  lightspeed.init();
+  //lightspeed.init();
 	/*
 	var mer = (autokm(planets.Mercury.au)/c).toFixed(3);
   var merms = mer * 1000;
@@ -167,16 +253,29 @@ $(document).ready(function(){
   $(".planet.open i").animate({"width":"100%"}, merms, 'linear');
 	*/
 })
+.on("click", ".action_startdemo", function(e){
+	e.preventDefault();
+	$("#intro").fadeOut(400, function(){
+		lightspeed.init();
+	});
+})
 .on("click", ".planet", function(){
-  $(".planet").removeClass("open");
+  lightspeed.goNext = false;
+	$(".planet.open i").stop(true, true);
+	/*
+	$(".planet").removeClass("open");
 	$(".planet").find("i").remove();
-  $(this).addClass("open").html("<i></i>");
+	$(".planet").find(".timer").remove();
+  $(this).addClass("open").html('<i></i><div class="timer"></div>');
 	var timing = $(this).data("await");
-	$(this).find("i").transition({"width":"100%"}, timing, "linear");
+	//$(this).find("i").transition({"width":"100%"}, timing, "linear");
+	$(".planet.open").find("i").transition({"width":"100%"}, timing, "linear");
+	*/
+	lightspeed.startLight($(this));
 })
 .on("transitionend", ".planet.open i", function(){
 	console.log("We made it!");
-	$(this).parents(".planet").next().trigger("click");
+	//$(this).parents(".planet").next().trigger("click");
 })
 ;  
 </script>
