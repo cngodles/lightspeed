@@ -14,7 +14,8 @@ header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align
 
 #intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; padding: 30px; }
 #intro h1 { font-size: 36px; }
-#intro a  { display: inline-block; padding: 10px 20px; text-align: center; background-color: rgba(255,150,0,1.00); color:#fff; text-decoration: none; border:double 3px #333; }
+#intro p { line-height: 1.5;}
+#intro a  { display: inline-block; padding: 10px 20px; text-align: center; background-color: rgba(255,150,0,1.00); color:#fff; text-decoration: none; border:double 3px #333; font-weight:700; }
 .planet     { width:0; height:100%; display:none; box-sizing:border-box; }
 .planet.edge { width: 2%; height:100%; position: fixed; left:0; display:block;  border-right:1px solid #333; font-size:10px; cursor: pointer; transition: all 320ms ease-in-out; }
 .planet.edge.next { left:auto; right:0; border-left:1px solid #333; }
@@ -69,12 +70,12 @@ div.planet.open:before { content:attr(data-name); }
 <div id="intro">
 	<h1>The Speed of Light</h1>
 	<p><i>In Real Time.</i></p>
-  <p>Light is fast. It travels 300km every second, or 186,000 miles per second. But space is also large. 
+  <p>Light is fast. It travels 300 km (or 299,792,458 m) every second, or 186,000 miles per second. But space is also large. 
     Our own galaxy would take 200,000 years to cross at the speed of light. Once a photon leaves the Sun, on average it will take more than 4 hours
   to cross the orbit of Nepture. Click the button below to run a simulated journey of a beam of light as it leaves the Sun and crosses the Solar System.</p>
 	<p><a href="#" class="action_startdemo">Run Simulation</a></p>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!--
 <script src="js/jquery.transit.min.js"></script>
 -->
