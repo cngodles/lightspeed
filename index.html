@@ -38,8 +38,8 @@ div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:36
 div.planet:before { content:attr(data-name); }
 div.planet.open:before { content:attr(data-name); }
 
-.planetbody { display:block; border-radius:50%; background-color: #fff; top: 50%; left:50%; position: absolute; z-index: 99; overflow: hidden; }
-.planetbody img { width: 100%; height:auto; display: block; margin: 0; padding: 0; outline: 0; }
+.planetbody { display:block; border-radius:50%; background-color: #fff; top: 50%; left:50%; position: absolute; z-index: 99; overflow: hidden; min-width: 28px; min-height: 28px; transform: translateX(-50%); }
+.planetbody img { width: 100%; height:auto; display: block; margin: 0; padding: 0; outline: 0; image-rendering: pixelated; image-rendering: crisp-edges; }
   
 .timer { font-size:18px; line-height:24px; position: absolute; width:80%; height:10%; top:85%; left:10%; right:10%; bottom:5%; color:#fff; text-align: center; z-index: 99; }
 .facts { font-size:18px; line-height:24px; position: absolute; width:50%; height:20%; top:15%; left:25%; right:25%; bottom:65%; color:#fff; text-align: center; z-index: 99; }
@@ -126,9 +126,10 @@ var lightspeed = {
         var spanwidthkm = parseFloat(autokm(parseFloat(target.data("span"))));
         var spanwidth = spanwidthkm.toFixed(1);
         var planetpercent = ((target.data("d")/spanwidth)*100).toFixed(1);
+        var planetslug = target.data("name").replace(/ Flyby$/i, "").toLowerCase();
 
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>'+
-          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="t.png" alt="'+target.data("name")+'"></div>';
+          '<div class="planetbody" style="width:'+planetpercent+'%;"><img src="planets/'+planetslug+'.png" alt="'+target.data("name")+'"></div>';
         break;
       case 'cruise':
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>';
@@ -429,6 +430,16 @@ var planets = [
 	"In 2024 and 2025, NASA combined images from the Hubble and James Webb Space Telescopes to capture Saturn's changing seasons in unprecedented detail, with Webb's infrared vision revealing heat patterns and auroral activity hidden beneath the cloud tops."
     ]
   },
+  {
+    name:"Saturn Flyby",
+		t:'flyby',
+    au:9.58,
+		span:0.01,
+    d:120536,
+    facts:[
+      "You've made it!",
+    ]
+  },
 	{
     name:"Uranus",
     t:'cruise',
@@ -490,6 +501,16 @@ var planets = [
 	"Uranus orbits the Sun at an average distance of about 2.9 billion kilometers (1.8 billion miles), roughly 19 times farther from the Sun than Earth.",
 	"Sunlight takes about two hours and forty minutes to travel from the Sun to Uranus, compared to just over eight minutes for sunlight to reach Earth.",
 	"Uranus and Neptune are often called \"ice giant twins\" because they're nearly the same size and share a similar mix of water, ammonia, and methane ices beneath a hydrogen-helium atmosphere, though Neptune is slightly more massive and noticeably more vivid blue."
+    ]
+  },
+  {
+    name:"Uranus Flyby",
+		t:'flyby',
+    au:19.20,
+		span:0.01,
+    d:50724,
+    facts:[
+      "You've made it!",
     ]
   },
 	{
@@ -560,6 +581,16 @@ var planets = [
     	"Neptune is named after the Roman god of the sea, a fitting choice given its deep blue-toned appearance -- and unlike the planets visible to the naked eye, it's the only planet in our solar system found entirely through mathematical prediction rather than direct observation."
 	]
   	},
+  {
+    name:"Neptune Flyby",
+		t:'flyby',
+    au:30.05,
+		span:0.01,
+    d:49244,
+    facts:[
+      "You've made it!",
+    ]
+  },
 	{
     name:"Pluto",
     t:'cruise',
@@ -628,6 +659,16 @@ var planets = [
     "Charon's surface is characterized by impact craters, valleys, and a large dark region named Mordor Macula.",
     "Pluto's other moons—Styx, Nix, Kerberos, and Hydra—are much smaller than Charon and have irregular shapes."
 ]
+  },
+  {
+    name:"Pluto Flyby",
+		t:'flyby',
+    au:39.48,
+		span:0.01,
+    d:2377,
+    facts:[
+      "You've made it!",
+    ]
   }
 ];
 
