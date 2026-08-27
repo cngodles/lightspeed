@@ -1,10 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Watch a real-time simulation of a beam of light leaving the Sun and crossing the Solar System, planet by planet, at true speed-of-light timing.">
 
-<title>Speed of Light Simulation</title>
+<title>Speed of Light Simulator</title>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <style type="text/css">
 body { margin:0; font-family: 'Open Sans', sans-serif;}
@@ -37,8 +38,8 @@ div.planet.open:before { top:20px; text-align:center; padding:20px; font-size:36
 div.planet:before { content:attr(data-name); }
 div.planet.open:before { content:attr(data-name); }
 
-.planetbody { display:block; border-radius:50%; background-color: #fff; top: 50%; left:50%; position: absolute; z-index: 99; overflow: hidden; }
-.planetbody img { width: 100%; height:auto; display: block; margin: 0; padding: 0; outline: 0; }
+.planetbody { display:block; border-radius:50%; background-color: #fff; top: 50%; left:50%; position: absolute; z-index: 99; overflow: hidden; min-width: 28px; min-height: 28px; transform: translateX(-50%); }
+.planetbody img { width: 100%; height:auto; display: block; margin: 0; padding: 0; outline: 0; image-rendering: pixelated; image-rendering: crisp-edges; }
   
 .timer { font-size:18px; line-height:24px; position: absolute; width:80%; height:10%; top:85%; left:10%; right:10%; bottom:5%; color:#fff; text-align: center; z-index: 99; }
 .facts { font-size:18px; line-height:24px; position: absolute; width:50%; height:20%; top:15%; left:25%; right:25%; bottom:65%; color:#fff; text-align: center; z-index: 99; }
@@ -70,12 +71,12 @@ div.planet.open:before { content:attr(data-name); }
 <div id="intro">
 	<h1>The Speed of Light</h1>
 	<p><i>In Real Time.</i></p>
-  <p>Light is fast. It travels 229,792 km (or 299,792,458 m) every second, or 186,282 miles per second. But space is also large. 
+  <p>Light is fast. It travels 299,792 km (or 299,792,458 m) every second, or 186,282 miles per second. But space is also large.
     Our own galaxy would take 200,000 years to cross at the speed of light. Once a photon leaves the Sun, on average it will take more than 4 hours
-  to cross the orbit of Nepture. Click the button below to run a simulated journey of a beam of light as it leaves the Sun and crosses the Solar System.</p>
+  to cross the orbit of Neptune. Click the button below to run a simulated journey of a beam of light as it leaves the Sun and crosses the Solar System.</p>
 	<p><a href="#" class="action_startdemo">Run Simulation</a></p>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha384-fgGyf7Mo7DURSOMnOy7ed+dkq5Job205Gnzu6QIg0BOHKaqt4D76Dt8VlDCzcMHV" crossorigin="anonymous"></script>
 <!--
 <script src="js/jquery.transit.min.js"></script>
 -->
@@ -123,13 +124,12 @@ var lightspeed = {
       case 'flyby':
         
         var spanwidthkm = parseFloat(autokm(parseFloat(target.data("span"))));
-        //console.log(spanwidthkm);
         var spanwidth = spanwidthkm.toFixed(1);
         var planetpercent = ((target.data("d")/spanwidth)*100).toFixed(1);
-        console.log(spanwidthkm, spanwidth, planetpercent);
-        
+        var planetslug = target.data("name").replace(/ Flyby$/i, "").toLowerCase();
+
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>'+
-          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="t.png"></div>';
+          '<div class="planetbody" style="width:'+planetpercent+'%;"><img src="planets/'+planetslug+'.png" alt="'+target.data("name")+'"></div>';
         break;
       case 'cruise':
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>';
@@ -225,7 +225,7 @@ var planets = [
 			"Mercury has no moons.", 
 			"Mercury is much closer to the Sun than Earth. Because of this, you can never see it far from the "+
 			"Sun in the sky, usually at Sunrise or Sunset.", 
-			"The Sun rises once every 180 Earth days on Mercury",
+			"The Sun rises once every 176 Earth days on Mercury",
     ]
   },
   { 
@@ -256,7 +256,7 @@ var planets = [
   { 
     name:"Venus Flyby",
 		t:'flyby',
-    au:0.39,
+    au:0.72,
 		span:0.01, //1
     d:12104,
     facts:[
@@ -280,7 +280,7 @@ var planets = [
   { 
     name:"Earth Flyby",
 		t:'flyby',
-    au:0.39,
+    au:1,
 		span:0.01, //2
     d:12756,
     facts:[
@@ -297,17 +297,17 @@ var planets = [
       "Mars and our own Moon are two objects visited by rovers and studied. Landers have reached the surfaces of both Venus and Titan.", 
 "Six total rovers have explored the surface as of 2022, five by the United States and one by China.",
       "It can reach a high temperature of 35C (95F) on Mars. The air pressure is only 0.6% of Earth at the surface. 96% of the atmosphere is carbon dioxide.", 
-      "Global dust storms can cover the entire planet in clouds with wind speeds over 160 km/h (100mph).", 
+      "Global dust storms can cover the entire planet in clouds with wind speeds over 97 km/h (60mph).",
       "A day on Mars is similar to a day on Earth, lasting 24 hours and 39 minutes.",
-      "Mars can be seen unaided from Earth and even shows up as a reddish-looking point of light. It is the 5th brightest object in the sky when at its brightest.",
+      "Mars can be seen unaided from Earth and even shows up as a reddish-looking point of light. It is the 4th brightest object in the sky when at its brightest.",
       "The tallest mountain in the Solar System is on Mars. Olympus Mons is a shield volcano that is 21km tall.",
-      "The Sun is half as large in the sky on Mars than it is back home on Earth."
+      "The Sun is about two-thirds as large in the sky on Mars than it is back home on Earth."
     ]
   },
   { 
     name:"Mars Flyby",
 		t:'flyby',
-    au:0.39,
+    au:1.52,
 		span:0.01, //2
     d:6792,
     facts:[
@@ -324,26 +324,53 @@ var planets = [
       "Jupiter takes nearly 12 Earth years to travel around the Sun. ", 
       "Jupiter's Great Red Spot is huge. It is approximately 10,150 miles wide and could swallow the Earth whole.", 
       "Jupiter does, in fact, have Rings. There are four bands, but they are faint compared to Saturn.", 
-      "There are 80 known moons that orbit the planet, and chances are we will find a few more. The largest and most popular moons are Io, Europa, Ganymede, and Callisto.",
+      "There are 115 known moons that orbit the planet, and chances are we will find a few more. The largest and most popular moons are Io, Europa, Ganymede, and Callisto.",
       "Ganymede is the biggest and bigger than Mercury.",
       "Shortest Day despite being the biggest",
-      "Europa is thought to harbor liquid water under its icy crust. Many plans have been made to visit it, but as of 2022, none have launched.",
+      "Europa is thought to harbor liquid water under its icy crust. NASA's Europa Clipper launched in October 2024 to study it, and will arrive in 2030.",
       "Io has hundreds of volcanoes, with some spewing lava dozens of miles high. Its pitted and yellow appearance is due to these volcanoes.",
       "Ganymede is the largest moon in the entire solar system and the only one that has its own magnetic field. There is evidence of water there as well.",
-      "Callisto is heavily cratered, appearing much like our own mood. It is thought that it's been geologically dead for a very long time, with no ability to smooth over its surface with geologic activity.",
+      "Callisto is heavily cratered, appearing much like our own moon. It is thought that it's been geologically dead for a very long time, with no ability to smooth over its surface with geologic activity.",
       "Jupiter is the nearest Gas Giant planet to Earth. These massive planets present a surface of dense gasses. While there are theories about what the surface is like, some believe the gas becomes denser until it becomes liquid within. It may have the largest ocean, made of hydrogen.",
-      "80 moons and counting",
-      "Galileo was the first spacecraft to orbit Jupiter; Juno was the second and is still there as of 2022.",
+      "115 moons and counting",
+      "Galileo was the first spacecraft to orbit Jupiter; Juno was the second and remains operational as of 2026.",
 "Galileo used radioactive material to generate energy, while Juno used solar panels. It is the first spacecraft to be solar powered and operating at such a far distance.",
       "The Comet Shoemaker-Levy impacted Jupiter's surface in 1994. It is thought that Jupiter plays a key role in removing threats from the Solar System that could affect the Earth.",
       "The magnetic field is 14 times as strong as ours on Earth. This field protects it from solar radiation, but the planet produces a lot of radiation on its own.",
-      "Jupiter is HUGE. Its mass is 2.5 times as all the other planets combined."
+      "Jupiter is HUGE. Its mass is 2.5 times as all the other planets combined.",
+      "Jupiter's atmosphere is almost entirely hydrogen and helium, the same basic ingredients as the Sun, with just a trace of ammonia, methane, and water vapor mixed in to color its clouds.",
+      "Unlike Earth, Jupiter has no solid ground to land on. Its atmosphere just keeps getting thicker with depth until the gas gradually turns into liquid, with no clear surface in between.",
+      "Deep inside Jupiter, pressure is so extreme that hydrogen gets squeezed into a strange liquid metal that conducts electricity. Scientists think the churning of this metallic hydrogen, combined with Jupiter's fast spin, works like a giant dynamo that generates the planet's powerful magnetic field.",
+      "NASA's Juno spacecraft found that Jupiter's core isn't a hard ball like Earth's. It appears to be \"fuzzy,\" with heavy elements blended into the surrounding hydrogen rather than sitting in a neat solid lump.",
+      "The Great Red Spot has been shrinking for at least 150 years and once could have swallowed three Earths side by side. Oddly, as it shrinks it's also growing taller, and its color has deepened to a more intense orange since 2014.",
+      "Using precise gravity measurements, Juno found the Great Red Spot reaches roughly 186 miles (300 kilometers) below the cloud tops, far deeper than expected for a storm that looks so flat from above.",
+      "Jupiter's faint rings are made of tiny, dark, dusty particles, more like soot than the icy chunks in Saturn's bright rings. The dust comes from micrometeorite impacts on four small inner moons: Metis, Adrastea, Amalthea, and Thebe.",
+      "In December 1973, Pioneer 10 became the first spacecraft ever to fly past Jupiter, snapping around 300 photos as it raced by at roughly 78,000 miles per hour.",
+      "Pioneer 11 followed in December 1974, flying three times closer to Jupiter than Pioneer 10 had and capturing the first-ever images of the planet's poles.",
+      "Voyager 1 flew past Jupiter in 1979 and discovered a faint ring system nobody knew was there. During the same flyby, the Voyager probes spotted active volcanoes erupting on the moon Io, the first confirmed volcanic activity found anywhere beyond Earth.",
+      "The solar probe Ulysses swung by Jupiter in 1992, using the planet's gravity as a slingshot to bend its path into a unique orbit over the Sun's poles.",
+      "Cassini, on its way to Saturn, flew past Jupiter in 2000 and spent months photographing its atmosphere, rings, and moons.",
+      "New Horizons used a 2007 flyby of Jupiter to pick up a gravity boost that shaved years off its journey to Pluto, while also studying the giant planet's atmosphere along the way.",
+      "Jupiter's magnetosphere, the bubble of space shaped by its magnetic field, is considered the largest structure in the solar system. It stretches roughly 3.3 million miles (5.3 million kilometers) across, about 150 times wider than Jupiter itself.",
+      "Jupiter has auroras far more powerful than Earth's, including X-ray auroras first spotted by NASA's Chandra telescope in 2007. It's the only gas giant where this kind of X-ray light show has ever been detected.",
+      "Jupiter's radiation belts are some of the most intense in the solar system, partly because the volcanic moon Io constantly spews charged particles that get trapped and energized by Jupiter's magnetic field. To survive the onslaught, engineers built the Juno spacecraft a \"vault\" with centimeter-thick titanium walls to shield its electronics.",
+      "Galileo Galilei first spotted four bright points of light near Jupiter in January 1610 and within days realized they were moons circling the planet, not stars. It was the first time anyone had found objects that clearly orbited something other than Earth, and those four moons still bear his name today.",
+      "Jupiter is about 11 times wider than Earth, and roughly 1,300 Earths could fit inside its volume. Yet it's only about a quarter as dense as Earth, since it's built almost entirely from light gases instead of rock and metal.",
+      "Jupiter is roughly 318 times as massive as Earth. If it had somehow packed on about 80 times more mass, it could have ignited and become a star instead of a planet.",
+      "Many scientists think Jupiter was the first planet to fully form, coming together within the solar system's first million years. Its early gravity likely helped shape where the other planets ended up.",
+      "Jupiter spins faster than any other planet, completing a full rotation in about 9 hours and 56 minutes. That rapid spin flattens it slightly, making the planet visibly bulge at its equator.",
+      "Despite its fiery interior, Jupiter's average temperature is a frigid -166 degrees Fahrenheit (-110 degrees Celsius), since most of what we can measure is its cold, high-altitude cloud tops.",
+      "Juno revealed strange geometric clusters of storms at Jupiter's poles: a pentagon of five cyclones circling a sixth at the south pole, and an octagon of eight cyclones around a ninth at the north pole. These patterns have held remarkably stable for years.",
+      "Jupiter has its own lightning, but Juno discovered some of it, nicknamed \"shallow lightning,\" forms much higher in the atmosphere than expected, sparked by clouds where ammonia and water mix. The storms can also produce slushy ammonia hailstones scientists call \"mushballs.\"",
+      "Thousands of asteroids called Trojans share Jupiter's orbit around the Sun, trapped in stable zones far ahead of and behind the planet. NASA's Lucy spacecraft launched in 2021 to study several of them up close.",
+      "The colorful stripes circling Jupiter, called belts and zones, are powerful jet streams. The darker belts tend to be warmer, while the lighter zones are colder clouds of ammonia ice.",
+      "Beyond the four famous Galilean moons, Jupiter has a large family of small, irregular moons, likely captured asteroids and comets, that orbit far out in tilted, and often backward, paths. They're sorted into clusters with names like Himalia, Carme, Ananke, and Pasiphae."
     ]
   },
-  { 
+  {
     name:"Jupiter Flyby",
 		t:'flyby',
-    au:0.39,
+    au:5.20,
 		span:0.01, //2
     d:142984,
     facts:[
@@ -360,10 +387,10 @@ var planets = [
 	"Saturn is known for its prominent and extensive ring system, consisting mostly of ice particles.",
 	"The planet has a diameter of about 120,536 kilometers (74,898 miles), making it the second-largest planet in our solar system, after Jupiter.",
 	"Its average distance from the Sun is about 1.4 billion kilometers (886 million miles).",
-	"Saturn has the shortest day of any planet in the solar system, with its rotation period lasting about 10.7 hours.",
+	"Saturn has the second-shortest day of any planet in the solar system (after Jupiter), with its rotation period lasting about 10.7 hours.",
 	"A year on Saturn, or its orbital period around the Sun, takes approximately 29.5 Earth years.",
 	"Saturn has a dense atmosphere, with strong winds and storm systems, including the famous hexagonal storm at its north pole.",
-	"Saturn has more than 80 moons, with the largest being Titan, which is larger than the planet Mercury.",
+	"Saturn has more than 280 known moons -- far more than any other planet -- with the largest being Titan, which is larger than the planet Mercury.",
 	"The Cassini-Huygens spacecraft mission provided extensive data and imagery of Saturn and its moons, greatly expanding our understanding of the planet.",
 	"Saturn has a relatively low density, which means it could theoretically float in water, although finding a body of water large enough to contain it would be a challenge.",
 	"The rings of Saturn are made up of countless particles, ranging from tiny dust grains to large boulders, all orbiting the planet.",
@@ -372,10 +399,48 @@ var planets = [
 	"The moons of Saturn vary greatly in size, shape, and composition, with some being icy bodies, while others are rocky and cratered.",
 	"Enceladus, one of Saturn's moons, has geysers erupting from its south pole, indicating the presence of subsurface liquid water and raising the possibility of habitable environments.",
 	"Saturn has a relatively low internal temperature compared to Jupiter, leading to less internal heat radiation, which contributes to its less intense weather patterns.",
-	"The exploration of Saturn and its moons continues to be an area of active research, with scientists studying the planet's atmosphere, rings, and moons to learn more about the formation and evolution of our solar system."
+	"The exploration of Saturn and its moons continues to be an area of active research, with scientists studying the planet's atmosphere, rings, and moons to learn more about the formation and evolution of our solar system.",
+	"Titan, Saturn's largest moon, has a thick, hazy nitrogen-rich atmosphere that is actually denser than Earth's, with surface pressure about 1.5 times what we experience at sea level.",
+	"Titan is the only other place in the solar system besides Earth known to have stable liquid on its surface, in the form of rivers, lakes, and seas made of liquid methane and ethane instead of water.",
+	"NASA's Dragonfly mission, a nuclear-powered rotorcraft, is scheduled to launch toward Titan in 2028 and arrive in 2034, where it will fly between science sites to study the moon's organic chemistry.",
+	"Because Titan's atmosphere is thick and its gravity is weak, flying may actually be easier there than driving, which is part of why NASA designed Dragonfly as a drone rather than a rover.",
+	"The Cassini spacecraft ended its 13-year exploration of Saturn with a dramatic \"Grand Finale,\" diving 22 times through the gap between Saturn and its rings before deliberately plunging into the planet's atmosphere on September 15, 2017.",
+	"Cassini was intentionally destroyed to protect Saturn's potentially habitable moons, especially Enceladus and Titan, from any risk of contamination by the spacecraft.",
+	"Saturn's moon Mimas is nicknamed the \"Death Star moon\" because of the giant Herschel crater on its surface, which spans about a third of the moon's diameter and gives it a striking resemblance to the fictional space station.",
+	"Iapetus, one of Saturn's moons, is known as the \"yin-yang moon\" because one hemisphere is bright as snow while the other is as dark as coal, a stark two-toned appearance that puzzled astronomers for centuries.",
+	"Iapetus also has a bizarre mountain ridge running along its equator that rises up to 13 kilometers (8 miles) high, giving the moon a walnut-shaped profile unlike anything else in the solar system.",
+	"Rhea, Saturn's second-largest moon, has an extremely thin oxygen and carbon dioxide atmosphere, discovered by Cassini in 2010, making it one of the few worlds besides Earth known to have an oxygen atmosphere, however faint.",
+	"Hyperion, an oddly shaped moon of Saturn, has a spongy, heavily cratered surface and is thought to be so porous that much of its interior may actually be empty space.",
+	"Unlike most moons, Hyperion tumbles chaotically as it orbits Saturn rather than spinning smoothly, making its rotation nearly impossible to predict.",
+	"The Cassini Division, a gap roughly 4,800 kilometers (3,000 miles) wide, separates Saturn's A ring from its B ring and is easily visible through backyard telescopes.",
+	"Just outside the main rings lies the narrow F ring, which is shaped and \"shepherded\" by the gravity of two small moons, Prometheus and Pandora.",
+	"Saturn's rings aren't just sitting still: material from the rings, including water ice and organic molecules, constantly rains down into the planet's upper atmosphere, a phenomenon scientists call \"ring rain.\"",
+	"Galileo Galilei was the first person to observe Saturn's rings, in 1610, though his telescope wasn't powerful enough to identify them clearly, and he described the shapes on either side of the planet as \"ears.\"",
+	"It wasn't until 1655 that astronomer Christiaan Huygens, using a stronger telescope of his own design, correctly identified Saturn's rings as a ring and also discovered the moon Titan.",
+	"Pioneer 11 became the first spacecraft to fly past Saturn in 1979, passing within about 13,000 miles of the cloud tops and helping confirm a safe path through the rings for later missions.",
+	"Voyager 1 made its closest approach to Saturn in November 1980, and Voyager 2 followed in August 1981, together returning tens of thousands of images of the planet, its rings, and its moons.",
+	"After its Saturn flyby, Voyager 2 used the planet's gravity to slingshot onward to Uranus and Neptune, completing a rare \"Grand Tour\" of the outer solar system.",
+	"Saturn is tilted on its axis by about 27 degrees, similar to Earth's tilt, which gives it seasons, though each Saturnian season lasts roughly seven Earth years because of its long orbit.",
+	"Saturn's rings actually intensify its seasons by casting a shadow across part of the planet, making the hemisphere in winter even darker and colder than the tilt alone would cause.",
+	"Saturn's magnetic field is unusual because it is almost perfectly aligned with the planet's rotation axis, unlike the magnetic fields of Earth or Jupiter, which are noticeably tilted.",
+	"Deep inside Saturn, immense pressure squeezes hydrogen into a strange, electrically conducting form called metallic hydrogen, and the churning of this layer is thought to generate the planet's magnetic field.",
+	"In 2023, astronomers announced the discovery of dozens of new small moons around Saturn, and in March 2025 an international team confirmed another 128, cementing Saturn's status as the planet with the most known moons in the solar system.",
+	"Saturn occasionally produces enormous storms called \"Great White Spots\" that can grow wide enough to wrap around the entire planet; they tend to erupt roughly every 20 to 30 years.",
+	"Saturn's famous hexagonal storm at the north pole is so large that two Earths could fit inside it, with a hurricane at its center whose eye is about 50 times larger than an average hurricane eye on Earth.",
+	"In 2024 and 2025, NASA combined images from the Hubble and James Webb Space Telescopes to capture Saturn's changing seasons in unprecedented detail, with Webb's infrared vision revealing heat patterns and auroral activity hidden beneath the cloud tops."
     ]
   },
-	{ 
+  {
+    name:"Saturn Flyby",
+		t:'flyby',
+    au:9.58,
+		span:0.01,
+    d:120536,
+    facts:[
+      "You've made it!",
+    ]
+  },
+	{
     name:"Uranus",
     t:'cruise',
 		au:19.20,
@@ -388,7 +453,7 @@ var planets = [
 	"Uranus has a diameter of about 50,724 kilometers (31,518 miles), making it the third-largest planet in our solar system.",
 	"It has a relatively low density compared to the gas giants Jupiter and Saturn, indicating a higher proportion of ices and rock in its composition.",
 	"Uranus has a faint ring system, composed of dark particles and dust, which were discovered during a stellar occultation in 1977.",
-	"The planet has a system of 27 known moons, named after characters from the works of William Shakespeare and Alexander Pope.",
+	"The planet has a system of 29 known moons, named after characters from the works of William Shakespeare and Alexander Pope.",
 	"Uranus was officially discovered by the British astronomer William Herschel on March 13, 1781, making it the first planet to be discovered with a telescope.",
 	"Voyager 2 is the only spacecraft to have visited Uranus, passing by the planet in 1986 and providing valuable data and images of its atmosphere, rings, and moons.",
 	"Uranus has a pale blue-green coloration in its atmosphere due to the presence of methane gas, which absorbs red light and reflects blue and green wavelengths.",
@@ -399,44 +464,134 @@ var planets = [
 	"Like Jupiter and Saturn, Uranus experiences fast winds in its atmosphere, with speeds reaching up to 900 kilometers per hour (560 miles per hour).",
 	"The rings of Uranus are darker and more narrow compared to those of Saturn, consisting of larger particles and dust.",
 	"Uranus has several interesting moons, including Miranda, which has unique surface features such as cliffs and valleys, suggesting geological activity in the past.",
-	"The lack of significant internal heat sources on Uranus contributes to its relatively bland appearance compared to the more dynamic atmospheres of Jupiter and Saturn.",
-	"The study of Uranus continues to be a focus of planetary science, with ongoing research aiming to understand its unique characteristics and origins."
+	"Uranus was long thought to radiate almost no internal heat of its own, which was one theory for its relatively bland appearance compared to the more dynamic atmospheres of Jupiter and Saturn -- though a 2025 reanalysis of the data complicates that picture (more on that ahead).",
+	"The study of Uranus continues to be a focus of planetary science, with ongoing research aiming to understand its unique characteristics and origins.",
+	"Titania, discovered by Herschel in 1787, is Uranus's largest moon at about 1,578 kilometers (980 miles) across and is named for the queen of the fairies in Shakespeare's \"A Midsummer Night's Dream.\"",
+	"Oberon, Uranus's second-largest moon and Titania's Shakespearean counterpart, is heavily cratered and has patches of unexplained reddish material scattered across some of its crater floors.",
+	"Ariel appears to have the youngest, brightest surface of Uranus's five major moons, marked by relatively few large craters and a network of valleys hinting at past geologic activity.",
+	"Umbriel is the darkest of Uranus's large moons, covered in ancient, heavily cratered terrain, and features a mysterious bright ring-shaped marking nicknamed \"Wunda\" that scientists still can't fully explain.",
+	"Miranda's surface is a chaotic patchwork of giant grooved ovals called \"coronae,\" unlike anything else in the solar system, which is why some scientists think the moon may have been shattered and reassembled sometime in its past.",
+	"Miranda is home to Verona Rupes, one of the tallest known cliffs in the solar system, with a drop estimated between 5 and 20 kilometers (3 to 12 miles).",
+	"Titania and Oberon were discovered by William Herschel in 1787, just six years after he discovered Uranus itself.",
+	"Ariel and Umbriel were discovered by British astronomer William Lassell in 1851, nearly seventy years after Uranus was found.",
+	"Miranda wasn't spotted until 1948, when astronomer Gerard Kuiper found it, making it the last of Uranus's five major moons to be discovered.",
+	"When William Herschel discovered Uranus, he initially named it \"Georgium Sidus,\" or \"George's Star,\" in honor of England's King George III.",
+	"Astronomers outside Britain weren't keen on naming a planet after a living king, so German astronomer Johann Bode proposed \"Uranus,\" after the Greek sky god Ouranos, to match the tradition of naming planets for mythological deities.",
+	"Even after Bode's suggestion caught on elsewhere, Britain's Nautical Almanac Office didn't officially switch from \"Georgium Sidus\" to \"Uranus\" until 1850, almost seventy years after the planet's discovery.",
+	"Uranus is the only planet in the solar system named for a Greek god rather than a Roman one; every other planet takes its name from Roman mythology.",
+	"The leading theory for Uranus's extreme sideways tilt is that a massive object, roughly two to three times the mass of Earth, slammed into the young planet billions of years ago and knocked it onto its side.",
+	"That same ancient collision may have thrown off a disk of debris that eventually came together to form many of Uranus's present-day moons.",
+	"Because Uranus's rings and major moons orbit around its tilted equator, the whole system rolls around the Sun together like a ball rather than spinning like a top the way most planets do.",
+	"A day on Uranus lasts about 17 hours and 14 minutes, a figure astronomers only pinned down precisely in 2025 using more than a decade of Hubble observations of the planet's aurorae.",
+	"That refined day length turned out to be about 28 seconds longer than the estimate scientists had relied on since Voyager 2's 1986 flyby.",
+	"For decades, Uranus appeared to be the only giant planet that radiated no extra heat of its own, but a 2025 study reanalyzing decades of data found it actually emits about 15 percent more energy than it receives from the Sun.",
+	"Scientists still aren't sure why Uranus's internal heat output is so much lower than Jupiter's, Saturn's, or Neptune's, though one idea is that the same impact that tipped the planet over also let much of its primordial heat escape.",
+	"Despite orbiting roughly a billion miles closer to the Sun than Neptune, Uranus is actually the colder of the two ice giants and holds the record for the coldest planetary atmosphere ever measured in the solar system.",
+	"Uranus has 13 known rings, arranged in two groups: nine narrow, dark inner rings and two more widely spaced outer rings.",
+	"During its 1986 flyby, Voyager 2 spotted two additional rings, named Lambda and Zeta, that hadn't been detected in the original 1977 discovery.",
+	"Observations by the James Webb Space Telescope between 2023 and 2025 revealed that Uranus's two outer rings are made of different material, one rich in water ice and the other mostly dust, a puzzle scientists are still trying to solve.",
+	"In February 2025, JWST spotted a tiny, roughly 10-kilometer-wide moon hidden within Uranus's dark inner rings, becoming the planet's 29th known moon.",
+	"NASA's proposed Uranus Orbiter and Probe mission was named the top-priority flagship mission by the 2023 Planetary Science Decadal Survey.",
+	"If funded, the Uranus Orbiter and Probe would drop an atmospheric probe into the planet and spend several years touring Uranus and its major moons, though a shortage of the plutonium used to power deep-space missions has pushed a likely launch to the mid-to-late 2030s.",
+	"Uranus's magnetic field is tilted about 59 degrees away from its rotation axis and offset from the planet's center by roughly a third of its radius, making it one of the most lopsided magnetic fields of any planet.",
+	"Because its magnetic field is so skewed, Uranus's aurorae don't cluster near its poles the way Earth's, Jupiter's, or Saturn's do.",
+	"Hubble captured the first clear images of Uranus's aurorae in 2011 during a burst of solar activity; unlike Earth's aurorae, which can glow for hours, Uranus's lasted only a couple of minutes.",
+	"Scientists estimate Uranus's rocky core has only about half of Earth's mass and makes up less than 20 percent of the planet's radius, small compared to the thick icy layers surrounding it.",
+	"There's an ongoing debate among planetary scientists about whether Uranus really deserves the \"ice giant\" label, since newer models suggest it may contain more rock than ice.",
+	"Uranus orbits the Sun at an average distance of about 2.9 billion kilometers (1.8 billion miles), roughly 19 times farther from the Sun than Earth.",
+	"Sunlight takes about two hours and forty minutes to travel from the Sun to Uranus, compared to just over eight minutes for sunlight to reach Earth.",
+	"Uranus and Neptune are often called \"ice giant twins\" because they're nearly the same size and share a similar mix of water, ammonia, and methane ices beneath a hydrogen-helium atmosphere, though Neptune is slightly more massive and noticeably more vivid blue."
     ]
   },
-	{ 
+  {
+    name:"Uranus Flyby",
+		t:'flyby',
+    au:19.20,
+		span:0.01,
+    d:50724,
+    facts:[
+      "You've made it!",
+    ]
+  },
+	{
     name:"Neptune",
     t:'cruise',
 	au:30.05,
 	span:10.85,
     facts:[
     	"Neptune is the eighth and farthest planet from the Sun in our solar system. This is the longest span on our trip: nearly 11 times the distance from the Sun to the Earth.",
-    	"It is a gas giant, primarily composed of hydrogen, helium, and trace amounts of methane.",
+    	"It is an ice giant, primarily composed of hydrogen, helium, and trace amounts of methane, along with heavier icy materials like water and ammonia.",
     	"Neptune has a diameter of about 49,244 kilometers (30,598 miles), making it the fourth-largest planet in our solar system.",
     	"The planet's blue coloration is due to the presence of methane in its atmosphere, which absorbs red light and reflects blue light.",
     	"Neptune has the strongest winds in the solar system, with speeds reaching up to 2,100 kilometers per hour (1,300 miles per hour) in its upper atmosphere.",
-    	"It has a Great Dark Spot, similar to Jupiter's Great Red Spot, which is a massive storm system observed in the planet's southern hemisphere.",
+    	"Voyager 2 spotted a Great Dark Spot in 1989, a massive storm similar to Jupiter's Great Red Spot -- but unlike Jupiter's, it wasn't permanent. It had vanished by 1994, and new dark spots have appeared and faded since.",
 	"Neptune's atmosphere is divided into distinct cloud bands, with features such as clouds, storms, and high-speed jet streams.",
     	"Triton, Neptune's largest moon, is one of the coldest objects in the solar system, with surface temperatures dropping below -235 degrees Celsius (-391 degrees Fahrenheit).",
     	"Triton orbits Neptune in a retrograde motion, meaning it orbits in the opposite direction of the planet's rotation.",
-    	"Neptune has a faint ring system, discovered in 1989 by the Voyager 2 spacecraft, consisting of dust particles and ice.",
-    	"The planet's magnetic field is tilted relative to its rotational axis and is offset from the planet's center, possibly due to the presence of a rocky core.",
+    	"Neptune has a faint ring system, first detected in 1984 via stellar occultation and confirmed/imaged by the Voyager 2 spacecraft in 1989, consisting of dust particles and ice.",
+    	"The planet's magnetic field is tilted relative to its rotational axis and is offset from the planet's center, likely due to convective motion in its electrically-conductive icy mantle.",
     	"Neptune's magnetic field is about 27 times more powerful than Earth's and is responsible for trapping charged particles in its magnetosphere.",
     	"Voyager 2 is the only spacecraft to have visited Neptune, flying by the planet in 1989 and providing valuable data and images of its atmosphere, rings, and moons.",
-    	"Neptune has 14 known moons, with Triton being the largest and most notable.",
-    	"The planet's surface gravity is approximately 1.12 times that of Earth's.",
+    	"Neptune has 16 known moons, with Triton being the largest and most notable.",
+    	"The planet's surface gravity is approximately 1.14 times that of Earth's.",
     	"Neptune has a relatively low internal temperature, with its heat primarily coming from residual heat leftover from its formation.",
     	"Like Uranus, Neptune experiences extreme seasonal variations due to its axial tilt, which is tilted at about 28 degrees.",
     	"The study of Neptune's atmosphere and weather patterns continues to be a focus of planetary science, with ongoing research aiming to understand the dynamics of its turbulent atmosphere.",
-    	"Neptune's orbit is highly elliptical, taking about 165 Earth years to complete one orbit around the Sun.",
+    	"Neptune's orbit is nearly circular -- one of the most circular of any planet -- and takes about 165 Earth years to complete one orbit around the Sun.",
     	"The average distance from Neptune to the Sun is about 4.5 billion kilometers (2.8 billion miles).",
     	"Neptune was discovered in 1846 by the mathematician Urbain Le Verrier and the astronomer Johann Galle, based on mathematical predictions of its existence.",
     	"Neptune's interior is believed to consist of a rocky core surrounded by a mantle of water, ammonia, and methane ices, and an outer layer of hydrogen and helium gases.",
    	"The extreme pressure and temperatures in Neptune's interior give rise to exotic forms of ice, such as 'hot ice' and 'superionic ice'.",
     	"Neptune's atmosphere experiences complex weather patterns, including large-scale storm systems, clouds of methane ice crystals, and high-speed winds.",
-    	"The study of Neptune and its moons provides valuable insights into the formation and evolution of the outer solar system, as well as the processes that govern planetary atmospheres and interiors."
+    	"The study of Neptune and its moons provides valuable insights into the formation and evolution of the outer solar system, as well as the processes that govern planetary atmospheres and interiors.",
+    	"Triton, Neptune's largest moon, is thought to be a captured dwarf planet from the Kuiper Belt -- essentially an icy relative of Pluto that wandered too close and got trapped by Neptune's gravity billions of years ago.",
+    	"In 1989, Voyager 2 spotted geysers on Triton shooting nitrogen gas and dark icy particles up to 8 kilometers (5 miles) into the sky, making it one of only a handful of moons in the solar system known to be geologically active.",
+    	"Triton has an extremely thin nitrogen atmosphere, with surface pressure only a tiny fraction of Earth's, and it even produces wispy clouds of nitrogen ice crystals a few kilometers above the surface.",
+    	"Because Triton orbits Neptune backward (opposite the planet's rotation), tidal forces are slowly dragging it inward. In roughly 3.6 billion years, it's expected to either crash into Neptune or be torn apart, possibly forming a ring system as spectacular as Saturn's.",
+    	"Triton is actually slightly larger than the dwarf planet Pluto, and the two worlds share a lot in common: similar size, similar icy composition, and probably a similar birthplace out in the Kuiper Belt.",
+    	"Triton is tidally locked to Neptune, meaning the same hemisphere always faces the planet -- just like our own Moon always shows Earth the same face.",
+    	"Because of heat generated by its unusual retrograde orbit, scientists suspect Triton may hide a liquid water ocean beneath its icy shell, making it a candidate \"ocean world\" alongside moons like Europa and Enceladus.",
+    	"Neptune's second-largest moon, Proteus, is nearly as big as a moon can get while still being lumpy and irregular rather than rounded into a sphere by its own gravity.",
+    	"Nereid, discovered in 1949, has one of the most elongated orbits of any moon in the solar system, swinging from about 1.4 million to 9.7 million kilometers away from Neptune over the course of each orbit.",
+    	"Two of Neptune's inner moons, Naiad and Thalassa, perform an orbital \"dance of avoidance\": Naiad zigzags up and down just enough that whenever it laps the slightly slower Thalassa, it always passes safely above or below it, never colliding.",
+    	"Hippocamp, discovered in 2013 in old Hubble Space Telescope images, is Neptune's smallest known moon at only about 34 kilometers (21 miles) across -- likely a chunk that broke off the much larger moon Proteus after an ancient comet impact.",
+    	"In February 2024, astronomers using ground-based telescopes announced two more tiny moons of Neptune, one of which is the faintest moon ever found orbiting the planet and took years of follow-up observations just to confirm its orbit.",
+    	"Neptune's existence was predicted with mathematics before anyone ever saw it, after astronomers noticed that the orbit of Uranus was being tugged by the gravity of some unseen body.",
+    	"Two mathematicians, Urbain Le Verrier in France and John Couch Adams in England, independently calculated roughly where the mystery planet should be, setting off an international dispute over who truly deserved credit for the discovery.",
+    	"On the night of September 23, 1846, astronomer Johann Galle pointed his telescope at the spot Le Verrier had calculated and found Neptune within about an hour -- less than one degree from the predicted position.",
+    	"The Neptune priority dispute simmered for well over a century; it wasn't until historical documents resurfaced in 1998 that scholars could properly credit Adams's independent, if less precise, calculations.",
+    	"A day on Neptune lasts just under 16 hours, but because the planet is a giant ball of gas and ice rather than solid rock, different atmospheric layers rotate at different speeds -- which made its exact rotation period notoriously difficult to pin down.",
+    	"Neptune completed its very first full orbit of the Sun since its 1846 discovery only in 2011, meaning humanity has now watched Neptune complete less than two full \"Neptune years\" in all of recorded history.",
+    	"Voyager 2 made its closest approach to Neptune on August 25, 1989, passing about 4,950 kilometers (3,000 miles) above the planet's north pole -- the last planetary encounter of its epic 12-year \"Grand Tour\" of the outer solar system.",
+    	"In that single, brief flyby, Voyager 2 discovered six new moons, confirmed and imaged Neptune's ring system, spotted its Great Dark Spot, and captured the only close-up images of Triton's surface ever taken.",
+    	"Neptune's Great Dark Spot, discovered by Voyager 2, was roughly the size of Earth -- large enough that its long axis alone could have swallowed our entire planet.",
+    	"A proposed future mission called \"Neptune Odyssey\" would send a dedicated orbiter and atmospheric probe to study Neptune and Triton up close, but as of the latest planetary science priorities, NASA's next ice-giant mission is aimed at Uranus first, leaving no confirmed return trip to Neptune anytime soon.",
+    	"Neptune radiates about 2.6 times more heat than it receives from the Sun, an energy surplus that scientists still can't fully explain, even after accounting for leftover heat from its formation and slow gravitational contraction.",
+    	"Oddly, Neptune's near-twin Uranus doesn't show this same internal heat surplus, and researchers still aren't sure exactly why the two ice giants differ so much in this respect.",
+    	"Neptune's ring system has five main rings, named Galle, Le Verrier, Lassell, Arago, and Adams, each honoring an astronomer connected to the planet's discovery.",
+    	"The outermost Adams ring contains unusually bright, clumped segments nicknamed Liberte, Egalite, Fraternite, and Courage. By the normal laws of orbital motion these clumps should spread out evenly, but the gravity of the small moon Galatea appears to hold them in place.",
+    	"Neptune's magnetic field is tilted about 47 degrees from its rotation axis and is offset from the planet's center by more than half its radius -- putting it closer to the cloud tops than to the planet's core.",
+    	"Uranus has an equally bizarre, steeply tilted magnetic field, which suggests both ice giants generate their magnetism in a relatively shallow layer of slushy, electrically conductive ice rather than deep within a solid core, unlike Earth or Jupiter.",
+    	"In 2022, scientists reprocessing decades of telescope data found that Neptune isn't nearly as deep blue as its famous photos suggest -- its true color is a much paler blue-green, quite close to that of Uranus.",
+    	"The vivid blue seen in classic Voyager 2 images came from how the black-and-white camera data was combined and contrast-stretched afterward on Earth, not from Neptune's actual appearance.",
+    	"In 2022, the James Webb Space Telescope captured the clearest images of Neptune's rings in more than three decades, revealing faint dust bands that even Voyager 2 wasn't able to detect during its 1989 flyby.",
+    	"In 2023, JWST detected auroras on Neptune for the very first time, picking up a faint glow from charged molecules in its atmosphere -- a discovery that had eluded astronomers for decades, even though auroras on Jupiter, Saturn, and Uranus were confirmed long ago.",
+    	"Between 2019 and 2020, most of Neptune's visible cloud cover mysteriously vanished, and researchers later linked the disappearance to the Sun's roughly 11-year activity cycle -- showing that even a planet 4.5 billion kilometers away isn't immune to solar influence.",
+    	"Despite being smaller in diameter than Uranus, Neptune is actually the denser and more massive of the two ice giants, making it the third most massive planet in the solar system after Jupiter and Saturn.",
+    	"Neptune is named after the Roman god of the sea, a fitting choice given its deep blue-toned appearance -- and unlike the planets visible to the naked eye, it's the only planet in our solar system found entirely through mathematical prediction rather than direct observation."
 	]
   	},
-	{ 
+  {
+    name:"Neptune Flyby",
+		t:'flyby',
+    au:30.05,
+		span:0.01,
+    d:49244,
+    facts:[
+      "You've made it!",
+    ]
+  },
+	{
     name:"Pluto",
     t:'cruise',
 		au:39.48,
@@ -447,7 +602,7 @@ var planets = [
     "Pluto was considered the ninth planet in our solar system until its reclassification as a dwarf planet by the International Astronomical Union (IAU) in 2006.",
     "The decision to reclassify Pluto was based on new criteria for what constitutes a planet, including the requirement that a planet must have cleared its orbit of other debris.",
     "Pluto has a highly elliptical orbit that takes it closer to the Sun than Neptune for about 20 years of its 248-year orbital period.",
-    "Its distance from the Sun varies between about 4.4 billion kilometers (2.8 billion miles) at perihelion to about 7.4 billion kilometers (4.6 billion miles) at aphelion.",
+    "Its distance from the Sun varies between about 4.5 billion kilometers (2.8 billion miles) at perihelion to about 7.4 billion kilometers (4.6 billion miles) at aphelion.",
     "Pluto has a diameter of approximately 2,377 kilometers (1,476 miles), making it smaller than Earth's Moon.",
     "It has a thin atmosphere primarily composed of nitrogen, with trace amounts of methane and carbon monoxide.",
     "The surface of Pluto is covered in a variety of icy materials, including nitrogen, methane, and carbon monoxide, as well as water ice.",
@@ -495,39 +650,25 @@ var planets = [
     "The heart-shaped region on Pluto's surface, informally named Tombaugh Regio, is one of its most prominent features.",
     "Tombaugh Regio is a large, bright area on Pluto's surface, possibly composed of nitrogen ice.",
     "Pluto's surface temperature varies depending on its distance from the Sun, ranging from about -240 degrees Celsius (-400 degrees Fahrenheit) to -218 degrees Celsius (-360 degrees Fahrenheit).",
-    "Pluto's surface temperature is influenced by its thin atmosphere, which can trap heat and moderate surface temperatures.",
+    "Pluto's thin atmosphere doesn't warm the surface -- if anything the opposite: as surface ice sublimates into gas it cools the surface, while the hazy atmosphere above actually warms with altitude.",
     "Pluto's thin atmosphere is primarily composed of nitrogen, with trace amounts of methane and carbon monoxide.",
     "Pluto's atmosphere undergoes seasonal changes as the dwarf planet moves along its highly elliptical orbit, leading to variations in surface pressure and temperature.",
     "Pluto's moons are thought to have formed from debris left over from the collision that created the Pluto-Charon system.",
     "Pluto's moons have irregular shapes and are composed of a mixture of water ice and rock.",
     "Pluto's largest moon, Charon, is about half the size of Pluto and has a nearly circular orbit around the dwarf planet.",
     "Charon's surface is characterized by impact craters, valleys, and a large dark region named Mordor Macula.",
-    "Pluto's other moons—Styx, Nix, Kerberos, and Hydra—are much smaller than Charon and have irregular shapes.",
-    "The discovery of Pluto's moons provided valuable insights into the formation and evolution of the Pluto-Charon system.",
-    "Pluto's moons are thought to have formed from debris left over from the collision that created the Pluto-Charon system.",
-    "Pluto's moons have irregular shapes and are composed of a mixture of water ice and rock.",
-    "Pluto's largest moon, Charon, is about half the size of Pluto and has a nearly circular orbit around the dwarf planet.",
-    "Charon's surface is characterized by impact craters, valleys, and a large dark region named Mordor Macula.",
-    "Pluto's other moons—Styx, Nix, Kerberos, and Hydra—are much smaller than Charon and have irregular shapes.",
-    "The discovery of Pluto's moons provided valuable insights into the formation and evolution of the Pluto-Charon system.",
-    "Pluto and Charon orbit a common center of mass located outside Pluto's surface, making them a binary system.",
-    "The New Horizons spacecraft flew by Pluto on July 14, 2015, providing unprecedented images and data of the dwarf planet and its moons.",
-    "New Horizons captured detailed images of Pluto's surface features, including mountains, valleys, plains, and ice formations.",
-    "The flyby of Pluto by New Horizons marked the first time a spacecraft had visited the dwarf planet.",
-    "New Horizons also studied Pluto's atmosphere, revealing its composition and dynamics.",
-    "Pluto's atmosphere is primarily composed of nitrogen, with traces of methane and carbon monoxide.",
-    "Pluto's atmosphere extends to altitudes of about 1,600 kilometers (1,000 miles) above its surface.",
-    "Pluto's atmosphere undergoes seasonal changes as the dwarf planet moves along its highly elliptical orbit.",
-    "Pluto's atmosphere freezes and collapses as it moves farther from the Sun during its orbit, leading to changes in surface pressure and temperature.",
-    "Pluto's surface features include mountains, valleys, and plains, as well as possible cryovolcanoes—volcanoes that erupt icy materials instead of molten rock.",
-    "Pluto's surface is covered in a variety of icy materials, including nitrogen, methane, and carbon monoxide, as well as water ice.",
-    "The heart-shaped region on Pluto's surface, informally named Tombaugh Regio, is one of its most prominent features.",
-    "Tombaugh Regio is a large, bright area on Pluto's surface, possibly composed of nitrogen ice.",
-    "Pluto's surface temperature varies depending on its distance from the Sun, ranging from about -240 degrees Celsius (-400 degrees Fahrenheit) to -218 degrees Celsius (-360 degrees Fahrenheit).",
-    "Pluto's surface temperature is influenced by its thin atmosphere, which can trap heat and moderate surface temperatures.",
-    "Pluto's thin atmosphere is primarily composed of nitrogen, with trace amounts of methane and carbon monoxide.",
-    "Pluto's atmosphere undergoes seasonal changes as the dwarf planet moves along its highly elliptical orbit, leading to variations in surface pressure and temperature."
+    "Pluto's other moons—Styx, Nix, Kerberos, and Hydra—are much smaller than Charon and have irregular shapes."
 ]
+  },
+  {
+    name:"Pluto Flyby",
+		t:'flyby',
+    au:39.48,
+		span:0.01,
+    d:2377,
+    facts:[
+      "You've made it!",
+    ]
   }
 ];
 
@@ -571,7 +712,6 @@ $(document).ready(function(){
 	lightspeed.startLight($(this));
 })
 .on("transitionend", ".planet.open i", function(){
-	console.log("We made it!");
 	//$(this).parents(".planet").next().trigger("click");
 })
 ;  
