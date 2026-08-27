@@ -1,10 +1,11 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Watch a real-time simulation of a beam of light leaving the Sun and crossing the Solar System, planet by planet, at true speed-of-light timing.">
 
-<title>Speed of Light Simulation</title>
+<title>Speed of Light Simulator</title>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
 <style type="text/css">
 body { margin:0; font-family: 'Open Sans', sans-serif;}
@@ -127,7 +128,7 @@ var lightspeed = {
         var planetpercent = ((target.data("d")/spanwidth)*100).toFixed(1);
 
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>'+
-          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="t.png"></div>';
+          '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="t.png" alt="'+target.data("name")+'"></div>';
         break;
       case 'cruise':
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>';
