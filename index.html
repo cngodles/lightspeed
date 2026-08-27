@@ -123,11 +123,9 @@ var lightspeed = {
       case 'flyby':
         
         var spanwidthkm = parseFloat(autokm(parseFloat(target.data("span"))));
-        //console.log(spanwidthkm);
         var spanwidth = spanwidthkm.toFixed(1);
         var planetpercent = ((target.data("d")/spanwidth)*100).toFixed(1);
-        console.log(spanwidthkm, spanwidth, planetpercent);
-        
+
         fillhtml = '<i></i><div class="timer"></div><div class="facts"></div>'+
           '<div class="planetbody" style="width:'+planetpercent+'%; margin-left:-'+(planetpercent/2)+'%;"><img src="t.png"></div>';
         break;
@@ -548,7 +546,6 @@ $(document).ready(function(){
 	lightspeed.startLight($(this));
 })
 .on("transitionend", ".planet.open i", function(){
-	console.log("We made it!");
 	//$(this).parents(".planet").next().trigger("click");
 })
 ;  
