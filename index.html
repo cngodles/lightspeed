@@ -18,7 +18,7 @@ header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align
 .sun { position:absolute; top:45.5%; left:-55px; transform:translateY(-50%); width:110px; height:110px; border-radius:50%; overflow:hidden; box-shadow: 0 0 36px 8px rgba(255,205,110,0.35); }
 .sun img { width:100%; height:100%; display:block; image-rendering:pixelated; image-rendering:crisp-edges; }
 
-#intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; padding: 30px; }
+#intro { position: fixed; width:50%; max-height:90vh; top:50%; left:50%; transform:translate(-50%,-50%); overflow-y:auto; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; padding: 30px; }
 #intro h1 { font-size: 36px; }
 #intro p { line-height: 1.5;}
 #intro a  { display: inline-block; padding: 10px 20px; text-align: center; background-color: rgba(255,150,0,1.00); color:#fff; text-decoration: none; border:double 3px #333; font-weight:700; }
@@ -50,7 +50,7 @@ div.planet.open:before { content:attr(data-name); }
 .facts { font-size:18px; line-height:24px; position: absolute; width:50%; height:20%; top:15%; left:25%; right:25%; bottom:65%; color:#fff; text-align: center; z-index: 99; }
 
 @media only screen and (max-width: 767px) {
-  #intro { position: fixed; width:70%; height:70%; top:15%; left:15%; right:15%; bottom:15%; padding: 10px; }
+  #intro { width:70%; padding: 10px; }
   #intro h1 { font-size: 24px; }
   #intro p  { font-size: 13px; }
   
