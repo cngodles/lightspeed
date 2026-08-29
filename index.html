@@ -13,7 +13,7 @@ div  { box-sizing:border-box; }
 header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align: center; line-height: 30px; }
 #solarsystem { position:fixed; width:100%; height:100%; top:30px; left:0; right:0; bottom:0; background-color:#333; font-size:0; color:#fff; }
 
-.sun-clip { display:none; position:fixed; top:30px; bottom:0; left:0; overflow:hidden; z-index:20; pointer-events:none; }
+.sun-clip { display:none; position:fixed; top:30px; height:100%; left:0; overflow:hidden; z-index:20; pointer-events:none; }
 .sun-clip.visible { display:block; }
 .sun { position:absolute; top:45.5%; left:-55px; transform:translateY(-50%); width:110px; height:110px; border-radius:50%; overflow:hidden; box-shadow: 0 0 36px 8px rgba(255,205,110,0.35); }
 .sun img { width:100%; height:100%; display:block; image-rendering:pixelated; image-rendering:crisp-edges; }
@@ -151,13 +151,7 @@ var lightspeed = {
     var sunVisible = sunPlanet.is(".open, .edge");
     sunClip.toggleClass("visible", sunVisible);
     var fitSunClip = function(){
-      if(sunPlanet.is(".open")){
-        // the Sun's own leg: give it room to hang naturally off the left
-        // edge of the viewport rather than being boxed into the panel
-        sunClip.css({"left": "0px", "width": "200px"});
-        return;
-      }
-      if(!sunPlanet.is(".edge")) return;
+      if(!sunPlanet.is(".open, .edge")) return;
       var sunRect = sunPlanet[0].getBoundingClientRect();
       sunClip.css({"left": sunRect.left+"px", "width": sunRect.width+"px"});
     };
