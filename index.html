@@ -13,7 +13,8 @@ div  { box-sizing:border-box; }
 header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align: center; line-height: 30px; }
 #solarsystem { position:fixed; width:100%; height:100%; top:30px; left:0; right:0; bottom:0; background-color:#333; font-size:0; color:#fff; }
 
-.sun { position:fixed; left:16px; top:46px; width:110px; height:110px; border-radius:50%; overflow:hidden; z-index:40; box-shadow: 0 0 36px 8px rgba(255,205,110,0.35); }
+.sun { display:none; position:fixed; left:16px; top:46px; width:110px; height:110px; border-radius:50%; overflow:hidden; box-shadow: 0 0 36px 8px rgba(255,205,110,0.35); z-index:20; }
+.sun.visible { display:block; }
 .sun img { width:100%; height:100%; display:block; image-rendering:pixelated; image-rendering:crisp-edges; }
 
 #intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; padding: 30px; }
@@ -21,10 +22,10 @@ header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align
 #intro p { line-height: 1.5;}
 #intro a  { display: inline-block; padding: 10px 20px; text-align: center; background-color: rgba(255,150,0,1.00); color:#fff; text-decoration: none; border:double 3px #333; font-weight:700; }
 .planet     { width:0; height:100%; display:none; box-sizing:border-box; }
-.planet.edge { width: 2%; height:100%; position: fixed; left:0; display:block;  border-right:1px solid #333; font-size:10px; cursor: pointer; transition: all 320ms ease-in-out; }
+.planet.edge { width: 2%; height:100%; position: fixed; left:0; display:block;  border-right:1px solid #333; font-size:10px; cursor: pointer; transition: all 320ms ease-in-out; z-index:30; }
 .planet.edge.next { left:auto; right:0; border-left:1px solid #333; }
 
-.planet.open { width: 96%; position: fixed; left:2%; right:2%; display:inline-block; cursor: default; background-color: #555; }
+.planet.open { width: 96%; position: fixed; left:2%; right:2%; display:inline-block; cursor: default; background-color: #555; z-index:10; }
   
   
 .planet.open i { position:absolute; display:block; height:3%; top:44%; width:0; background-color:yellow; }
@@ -143,7 +144,9 @@ var lightspeed = {
   
     
 		target.addClass("open").html(fillhtml);
-    
+
+    $(".sun").toggleClass("visible", $('.planet[data-name="Sun"]').is(".open, .edge"));
+
     
     
 		var timing = target.data("await");
