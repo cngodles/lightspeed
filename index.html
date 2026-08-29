@@ -13,8 +13,9 @@ div  { box-sizing:border-box; }
 header       { position: fixed; height: 30px; top:0; left:0; right:0; text-align: center; line-height: 30px; }
 #solarsystem { position:fixed; width:100%; height:100%; top:30px; left:0; right:0; bottom:0; background-color:#333; font-size:0; color:#fff; }
 
-.sun { display:none; position:fixed; left:16px; top:46px; width:110px; height:110px; border-radius:50%; overflow:hidden; box-shadow: 0 0 36px 8px rgba(255,205,110,0.35); z-index:20; }
-.sun.visible { display:block; }
+.sun-clip { display:none; position:fixed; top:30px; bottom:0; left:0; overflow:hidden; z-index:20; pointer-events:none; }
+.sun-clip.visible { display:block; }
+.sun { position:absolute; top:50%; left:16px; transform:translateY(-50%); width:110px; height:110px; border-radius:50%; overflow:hidden; box-shadow: 0 0 36px 8px rgba(255,205,110,0.35); }
 .sun img { width:100%; height:100%; display:block; image-rendering:pixelated; image-rendering:crisp-edges; }
 
 #intro { position: fixed; width:50%; height:50%; top:25%; left:25%; right:25%; bottom:25%; border:double 3px #333; background-color: #ddd; color:#333; text-align: center; padding: 30px; }
@@ -56,7 +57,7 @@ div.planet.open:before { content:attr(data-name); }
   .planet.edge { width: 5%; }
   .planet.open { width: 90%; left:5%; }
 
-  .sun { width:64px; height:64px; left:8px; top:40px; }
+  .sun { width:64px; height:64px; left:8px; }
 
   .facts { font-size:18px; line-height:24px; position: absolute; width:80%; left:10%; right:10%; }
 }
@@ -104,7 +105,7 @@ var lightspeed = {
 			'data-await="'+merms+'"'+
 			'></div>');
 		}
-		$("#solarsystem").html('<div class="sun"><img src="planets/sun.png" alt="Sun"></div>'+returnhtml.join("\n"));
+		$("#solarsystem").html('<div class="sun-clip"><div class="sun"><img src="planets/sun.png" alt="Sun"></div></div>'+returnhtml.join("\n"));
 		this.startLight($(".planet").first());
 		/*
 		$(".planet:first-child").addClass("open");
@@ -145,7 +146,19 @@ var lightspeed = {
     
 		target.addClass("open").html(fillhtml);
 
-    $(".sun").toggleClass("visible", $('.planet[data-name="Sun"]').is(".open, .edge"));
+    var sunPlanet = $('.planet[data-name="Sun"]');
+    var sunClip = $(".sun-clip");
+    var sunVisible = sunPlanet.is(".open, .edge");
+    sunClip.toggleClass("visible", sunVisible);
+    var fitSunClip = function(){
+      if(!sunPlanet.is(".open, .edge")) return;
+      var sunRect = sunPlanet[0].getBoundingClientRect();
+      sunClip.css({"left": sunRect.left+"px", "width": sunRect.width+"px"});
+    };
+    if(sunVisible){
+      fitSunClip(); // best-effort now; .planet.edge animates its width over
+      setTimeout(fitSunClip, 340); // 320ms transition, plus a little slack
+    }
 
     
     
